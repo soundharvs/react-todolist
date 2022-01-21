@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import TodoList from "./TodoList";
-import  uuid from 'react-uuid';
-import { stringify } from "uuid";
+import  { v4 as uuid } from 'uuid';
 
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
 
@@ -10,12 +9,13 @@ function App() {
   const todoNameRef = useRef()
 
   useEffect(() => {
-    const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+    const storedTodos = localStorage.getItem(JSON.stringify(LOCAL_STORAGE_KEY))
     if(storedTodos) setTodos(storedTodos)
   }, [])
 
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, stringify(todos))
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos))
+    
   }, [todos])
 
   function toggleTodo(id){
@@ -45,7 +45,7 @@ function App() {
       <input ref={todoNameRef} type= "text" />
       <button onClick={handleAddtodo}>Add Todo</button>
       <button onClick={handleClearTodos}>Clear Complete</button>
-      <div>{todos.filter(todo => !todo.complete).length}0 left to do</div>
+      <div>{todos.filter(todo => !todo.complete).length} left to do</div>
     </>
   )
 }
